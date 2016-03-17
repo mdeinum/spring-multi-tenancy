@@ -1,5 +1,5 @@
 /*
- * Copyright 2007-2013 the original author or authors.
+ * Copyright 2007-2016 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,14 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package biz.deinum.multitenant.context;
 
 /**
  * ContextHolder will hold a reference to a context which can be used through-out
- * the application. The reference will be stored in a {@code ThreadLocal}.
+ * the application. The actual storing and creating is delegated to a {@link TenantContextHolderStrategy}
+ * implementation.
  *
  * @author Marten Deinum
- * @version 1.0
+ * @since 1.0
  */
 public abstract class TenantContextHolder {
 
