@@ -50,7 +50,7 @@ public class TentantContextClientInterceptor implements ClientInterceptor {
 
 		TransportContext transportContext = TransportContextHolder.getTransportContext();
 		WebServiceConnection webServiceConnection = transportContext.getConnection();
-		final String tenant = TenantContextHolder.getContext().getTenant();
+		final String tenant = TenantContextHolder.getContext().tenantIdentifier();
 		if (webServiceConnection instanceof HeadersAwareSenderWebServiceConnection) {
 			if (StringUtils.hasText(tenant)) {
 				try {

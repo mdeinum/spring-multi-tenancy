@@ -16,33 +16,34 @@
 
 package biz.deinum.multitenant.context;
 
+import org.hamcrest.Matchers;
 import org.junit.Test;
 
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.mock;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 
 /**
- * @author marten
+ * Tests for the {@link DefaultTenantContext}.
+ *
+ * @author Marten Deinum
  */
-public class TenantContextHolderTests {
+public class DefaultTenantContextTest {
 
 	@Test
-	public void shouldNotHaveTenantAfterClearing() {
+	public void setTenantShouldBeReturnedAsIdentifier() throws Exception {
+		DefaultTenantContext ctx = new DefaultTenantContext();
+		ctx.setTenant("test");
 
-		TenantContextHolder.clearContext();
-		assertThat(TenantContextHolder.getContext(), is(notNullValue()));
-		assertThat(TenantContextHolder.getContext().tenantIdentifier(), is(nullValue()));
+		assertThat(ctx.tenantIdentifier(), is("test"));
 	}
 
 	@Test
-	public void shouldHaveValueAfterSetting() {
+	public void setTenantShouldBeReturnedWhenGet() throws Exception {
+		DefaultTenantContext ctx = new DefaultTenantContext();
+		ctx.setTenant("test");
 
-		TenantContext context = mock(TenantContext.class);
+		assertThat(ctx.getTenant(), Matchers.<Object>is("test"));
 
-		TenantContextHolder.setContext(context);
-		assertThat(TenantContextHolder.getContext(), is(context));
 	}
-
 
 }

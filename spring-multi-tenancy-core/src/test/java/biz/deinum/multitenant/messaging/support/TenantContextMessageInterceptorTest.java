@@ -1,14 +1,31 @@
+/*
+ * Copyright 2007-2016 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package biz.deinum.multitenant.messaging.support;
 
-import biz.deinum.multitenant.context.TenantContextHolder;
-import biz.deinum.multitenant.context.TenantContextTestUtil;
+import java.util.Collections;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.support.GenericMessage;
 
-import java.util.Collections;
+import biz.deinum.multitenant.context.TenantContextHolder;
+import biz.deinum.multitenant.context.TenantContextTestUtil;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -27,11 +44,10 @@ public class TenantContextMessageInterceptorTest {
 
 	private TenantContextMessageInterceptor interceptor = new TenantContextMessageInterceptor();
 
-
 	@Before
 	public void before() {
 		TenantContextHolder.clearContext();
-		message = new GenericMessage("dummy-test-payload");
+		this.message = new GenericMessage("dummy-test-payload");
 	}
 
 	@After
@@ -42,8 +58,8 @@ public class TenantContextMessageInterceptorTest {
 	@Test
 	public void whenNoContextIsSetThenNoContextHeaderShouldBeSet() {
 
-		Message msg = interceptor.preSend(message, null);
-		String context = msg.getHeaders().get(interceptor.getHeaderName(), String.class);
+		Message msg = this.interceptor.preSend(message, null);
+		String context = msg.getHeaders().get(this.interceptor.getHeaderName(), String.class);
 		assertThat(context, is(nullValue()));
 	}
 
@@ -51,25 +67,23 @@ public class TenantContextMessageInterceptorTest {
 	public void whenContextIsSetThenTheContextHeaderShouldBeSet() {
 
 		TenantContextTestUtil.setCurrentTenant("test");
-		Message msg = interceptor.preSend(message, null);
-		String context = msg.getHeaders().get(interceptor.getHeaderName(), String.class);
+		Message msg = this.interceptor.preSend(message, null);
+		String context = msg.getHeaders().get(this.interceptor.getHeaderName(), String.class);
 		assertThat(context, is("test"));
 	}
 
 	@Test
 	public void whenContextHeaderIsSetThenContextShouldBeSet() {
 
-		message = new GenericMessage("dummy-test-payload", Collections.singletonMap(interceptor.getHeaderName(), "test"));
-		interceptor.postReceive(message, null);
-		assertThat(TenantContextHolder.getContext().getTenant(), is("test"));
+		this.message = new GenericMessage("dummy-test-payload", Collections.singletonMap(this.interceptor.getHeaderName(), "test"));
+		this.interceptor.postReceive(this.message, null);
+		assertThat(TenantContextHolder.getContext().tenantIdentifier(), is("test"));
 	}
 
 	@Test
 	public void whenNoContextHeaderIsSetThenContextShouldNotBeSet() {
 
-		interceptor.postReceive(message, null);
-		assertThat(TenantContextHolder.getContext().getTenant(), is(nullValue()));
+		this.interceptor.postReceive(this.message, null);
+		assertThat(TenantContextHolder.getContext().tenantIdentifier(), is(nullValue()));
 	}
-
-
 }

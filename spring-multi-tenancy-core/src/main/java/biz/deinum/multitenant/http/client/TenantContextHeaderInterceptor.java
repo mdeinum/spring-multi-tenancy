@@ -41,7 +41,7 @@ public class TenantContextHeaderInterceptor implements ClientHttpRequestIntercep
 	@Override
 	public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution) throws IOException {
 
-		String context = TenantContextHolder.getContext().getTenant();
+		String context = TenantContextHolder.getContext().tenantIdentifier();
 		if (StringUtils.hasText(context)) {
 			request.getHeaders().add(this.headerName, context);
 		}

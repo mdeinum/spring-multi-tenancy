@@ -21,12 +21,29 @@ import java.io.Serializable;
 /**
  * The {@code TenantContext} wraps a tenant and returns an identifier as a String.
  *
+ * @param <T> the type which needs to be {@code Serializable}.
+ *
  * @author Marten Deinum
  * @since 1.3
  */
-public interface TenantContext extends Serializable {
+public interface TenantContext<T extends Serializable> extends Serializable {
 
-	String getTenant();
+	/**
+	 *
+	 * @return the tenant identifier as a {@code String}
+	 */
+	String tenantIdentifier();
 
-	void setTenant(String tenant);
+	/**
+	 * Get the tenant
+	 * @return the tenant
+	 */
+	T getTenant();
+
+	/**
+	 * Set the tenant.
+	 *
+	 * @param tenant the tenant
+	 */
+	void setTenant(T tenant);
 }

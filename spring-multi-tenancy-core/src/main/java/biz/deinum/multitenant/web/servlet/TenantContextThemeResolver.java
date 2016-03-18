@@ -42,7 +42,7 @@ public class TenantContextThemeResolver extends AbstractThemeResolver {
 
 	@Override
 	public String resolveThemeName(HttpServletRequest request) {
-		String tenant = TenantContextHolder.getContext().getTenant();
+		String tenant = TenantContextHolder.getContext().tenantIdentifier();
 		if (StringUtils.hasText(tenant)) {
 			return this.prefix + tenant + this.suffix;
 		}

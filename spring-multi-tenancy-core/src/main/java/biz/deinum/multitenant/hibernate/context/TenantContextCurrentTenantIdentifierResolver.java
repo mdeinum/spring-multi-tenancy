@@ -33,7 +33,7 @@ public class TenantContextCurrentTenantIdentifierResolver implements CurrentTena
 
 	@Override
 	public String resolveCurrentTenantIdentifier() {
-		return TenantContextHolder.getContext().getTenant();
+		return TenantContextHolder.getContext().tenantIdentifier();
 	}
 
 	@Override

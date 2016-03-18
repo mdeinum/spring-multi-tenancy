@@ -23,9 +23,14 @@ package biz.deinum.multitenant.context;
  * @author Marten Deinum
  * @since 1.3
  */
-public class DefaultTenantContext implements TenantContext {
+public class DefaultTenantContext implements TenantContext<String> {
 
 	private String tenant;
+
+	@Override
+	public String tenantIdentifier() {
+		return this.tenant;
+	}
 
 	@Override
 	public String getTenant() {
@@ -34,7 +39,7 @@ public class DefaultTenantContext implements TenantContext {
 
 	@Override
 	public void setTenant(String tenant) {
-		this.tenant = tenant;
+		this.tenant= tenant;
 	}
 
 	@Override

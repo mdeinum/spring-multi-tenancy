@@ -21,7 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.util.Assert;
 
 /**
- * {@code TenantIdentificationStrategy} which always returns the same tenant identifier. Useful if an tenant
+ * {@code TenantIdentificationStrategy} which always returns the same tenant identifier. Useful if a tenant
  * identifier is needed in case there isn't one, for instance as a default.
  *
  * @author Marten Deinum

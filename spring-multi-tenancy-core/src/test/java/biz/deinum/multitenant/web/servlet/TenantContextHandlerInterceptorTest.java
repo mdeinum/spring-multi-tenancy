@@ -14,14 +14,9 @@
  * limitations under the License.
  */
 
-package biz.deinum.multitenant.web.filter;
+package biz.deinum.multitenant.web.servlet;
 
-import java.io.IOException;
 import java.util.Arrays;
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -30,86 +25,74 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.springframework.mock.web.MockFilterChain;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 
 import biz.deinum.multitenant.context.TenantContextHolder;
 import biz.deinum.multitenant.web.TenantIdentificationStrategy;
 
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
+import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.when;
 
 /**
- * Tests for the {@link TenantContextFilter}.
+ * Tests for the {@link TenantContextHandlerInterceptor}.
  *
  * @author Marten Deinum
  */
 @RunWith(MockitoJUnitRunner.class)
-public class TenantContextFilterTest {
+public class TenantContextHandlerInterceptorTest {
 
 	@Mock
 	private TenantIdentificationStrategy strategy;
 
 	private HttpServletRequest request = new MockHttpServletRequest();
 	private HttpServletResponse response = new MockHttpServletResponse();
-	private FilterChain mockChain = new MockFilterChain();
 
-	private TenantContextFilter filter;
+	private TenantContextHandlerInterceptor interceptor;
 
 	@Before
 	public void before() {
 
 		TenantContextHolder.clearContext();
-		this.filter = new TenantContextFilter(Arrays.asList(strategy));
+		this.interceptor = new TenantContextHandlerInterceptor(Arrays.asList(this.strategy));
 	}
 
 	@Test
 	public void whenContextFoundThenTheContextShouldBeSet() throws Exception {
 
 		when(this.strategy.getTenant(this.request)).thenReturn("test");
-		this.filter.doFilter(this.request, this.response, new VerifyFilterChain("test"));
+		this.interceptor.preHandle(this.request, this.response, null);
+		assertThat(TenantContextHolder.getContext().tenantIdentifier(), is("test"));
 	}
 
 	@Test(expected = IllegalStateException.class)
 	public void whenNoContextFoundThenAnExceptionShouldBeThrown() throws Exception {
+
 		when(this.strategy.getTenant(this.request)).thenReturn(null);
-		filter.doFilter(this.request, this.response, this.mockChain);
+		this.interceptor.preHandle(this.request, this.response, null);
 	}
 
 	@Test
 	public void whenNoContextFoundThenContextShouldBeNull() throws Exception {
 
-		this.filter.setThrowExceptionOnMissingTenant(false);
-		when(strategy.getTenant(this.request)).thenReturn(null);
-		this.filter.doFilter(this.request, this.response, new VerifyFilterChain(null));
+		this.interceptor.setThrowExceptionOnMissingTenant(false);
+		when(this.strategy.getTenant(this.request)).thenReturn(null);
+		this.interceptor.preHandle(this.request, this.response, null);
+		assertNull(TenantContextHolder.getContext().tenantIdentifier());
 	}
 
 	@Test
 	public void whenAfterCompletionIsCalledThenTheContextShouldBeNull() throws Exception {
 
 		when(this.strategy.getTenant(this.request)).thenReturn("test");
-		this.filter.doFilter(this.request, this.response, new VerifyFilterChain("test"));
-
+		this.interceptor.preHandle(this.request, this.response, null);
+		assertThat(TenantContextHolder.getContext().tenantIdentifier(), is("test"));
+		this.interceptor.afterCompletion(this.request, this.response, null, null);
 		assertThat(TenantContextHolder.getContext().tenantIdentifier(), is(nullValue()));
 	}
 
-	private static class VerifyFilterChain implements FilterChain {
 
-		private final String value;
-
-		public VerifyFilterChain(String value) {
-			super();
-			this.value = value;
-		}
-
-		@Override
-		public void doFilter(ServletRequest request, ServletResponse response) throws IOException, ServletException {
-
-			assertThat(TenantContextHolder.getContext().tenantIdentifier(), is(this.value));
-
-		}
-	}
 }
