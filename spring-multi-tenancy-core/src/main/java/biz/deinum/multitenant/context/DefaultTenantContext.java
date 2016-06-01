@@ -17,7 +17,7 @@
 package biz.deinum.multitenant.context;
 
 /**
- * Simple implemenation which only holds a {@code String} representation of a
+ * Simple implementation which only holds a {@code String} representation of a
  * tenant identifier.
  *
  * @author Marten Deinum
