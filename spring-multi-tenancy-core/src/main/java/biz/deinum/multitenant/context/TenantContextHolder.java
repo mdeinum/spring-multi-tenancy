@@ -16,6 +16,10 @@
 
 package biz.deinum.multitenant.context;
 
+import java.lang.reflect.Constructor;
+
+import org.springframework.util.ReflectionUtils;
+
 /**
  * ContextHolder will hold a reference to a context which can be used through-out
  * the application. The actual storing and creating is delegated to a {@link TenantContextHolderStrategy}
@@ -26,7 +30,45 @@ package biz.deinum.multitenant.context;
  */
 public abstract class TenantContextHolder {
 
-	private static TenantContextHolderStrategy strategy = new ThreadLocalTenantContextHolderStrategy();
+	public static final String MODE_THREADLOCAL = "MODE_THREADLOCAL";
+	public static final String MODE_INHERITABLETHREADLOCAL = "MODE_INHERITABLETHREADLOCAL";
+	public static final String MODE_GLOBAL = "MODE_GLOBAL";
+	public static final String SYSTEM_PROPERTY = "multi_tenant.strategy";
+	private static String strategyName = System.getProperty(SYSTEM_PROPERTY, MODE_THREADLOCAL);
+
+	private static TenantContextHolderStrategy strategy;
+
+	static {
+		initialize();
+	}
+
+	private static void initialize() {
+		if ((strategyName == null) || "".equals(strategyName)) {
+			// Set default
+			strategyName = MODE_THREADLOCAL;
+		}
+
+		if (strategyName.equals(MODE_THREADLOCAL)) {
+			strategy = new ThreadLocalTenantContextHolderStrategy();
+		}
+		else if (strategyName.equals(MODE_INHERITABLETHREADLOCAL)) {
+			strategy = new InheritableThreadLocalTenantContextHolderStrategy();
+		}
+		else if (strategyName.equals(MODE_GLOBAL)) {
+			strategy = new GlobalTenantContextHolderStrategy();
+		}
+		else {
+			// Try to load a custom strategy
+			try {
+				Class<?> clazz = Class.forName(strategyName);
+				Constructor<?> customStrategy = clazz.getConstructor();
+				strategy = (TenantContextHolderStrategy) customStrategy.newInstance();
+			}
+			catch (Exception ex) {
+				ReflectionUtils.handleReflectionException(ex);
+			}
+		}
+	}
 
 	public static TenantContext getContext() {
 		return strategy.getContext();
