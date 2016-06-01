@@ -12,7 +12,7 @@ import org.springframework.util.Assert;
  * @author M. Deinum
  * @since 1.3.0
  */
-public class GlobalTenantContextHolderStrategy implements TenantContextHolderStrategy {
+class GlobalTenantContextHolderStrategy implements TenantContextHolderStrategy {
 
 	private static TenantContext contextHolder;
 

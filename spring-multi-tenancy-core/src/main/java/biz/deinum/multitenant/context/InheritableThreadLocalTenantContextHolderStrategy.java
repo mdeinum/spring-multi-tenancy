@@ -24,7 +24,7 @@ import org.springframework.util.Assert;
  * @author Marten Deinum
  * @since 1.3
  */
-public class InheritableThreadLocalTenantContextHolderStrategy implements TenantContextHolderStrategy {
+class InheritableThreadLocalTenantContextHolderStrategy implements TenantContextHolderStrategy {
 
 	private static final ThreadLocal<TenantContext> contextHolder = new InheritableThreadLocal<>();
 
