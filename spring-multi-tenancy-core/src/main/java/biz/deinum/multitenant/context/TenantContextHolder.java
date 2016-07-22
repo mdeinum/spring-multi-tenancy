@@ -18,6 +18,8 @@ package biz.deinum.multitenant.context;
 
 import java.lang.reflect.Constructor;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.util.ReflectionUtils;
 
 /**
@@ -34,6 +36,7 @@ public abstract class TenantContextHolder {
 	public static final String MODE_INHERITABLETHREADLOCAL = "MODE_INHERITABLETHREADLOCAL";
 	public static final String MODE_GLOBAL = "MODE_GLOBAL";
 	public static final String SYSTEM_PROPERTY = "multi_tenant.strategy";
+	private static final Logger logger = LoggerFactory.getLogger(TenantContextHolder.class);
 	private static String strategyName = System.getProperty(SYSTEM_PROPERTY, MODE_THREADLOCAL);
 
 	private static TenantContextHolderStrategy strategy;
@@ -43,6 +46,7 @@ public abstract class TenantContextHolder {
 	}
 
 	private static void initialize() {
+		logger.debug("StrategyName: {}", strategyName);
 		if ((strategyName == null) || "".equals(strategyName)) {
 			// Set default
 			strategyName = MODE_THREADLOCAL;
