@@ -1,4 +1,1 @@
 language: java
-
-install: ./mvnw -U install --quiet -DskipTests=true
-script: ./mvnw clean test
