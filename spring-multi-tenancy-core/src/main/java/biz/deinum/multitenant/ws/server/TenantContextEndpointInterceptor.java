@@ -66,7 +66,7 @@ public class TenantContextEndpointInterceptor extends EndpointInterceptorAdapter
 	private void setTenantContextAsHeader() throws IOException {
 		TransportContext transportContext = TransportContextHolder.getTransportContext();
 		WebServiceConnection connection = transportContext.getConnection();
-		String tenant = TenantContextHolder.getContext().tenantIdentifier();
+		String tenant = TenantContextHolder.getContext().getTenant();
 		if (tenant != null && connection instanceof HeadersAwareSenderWebServiceConnection) {
 			((HeadersAwareSenderWebServiceConnection) connection).addRequestHeader(headerName, tenant);
 		}

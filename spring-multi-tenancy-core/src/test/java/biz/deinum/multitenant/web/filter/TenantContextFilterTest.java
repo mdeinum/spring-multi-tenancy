@@ -93,7 +93,7 @@ public class TenantContextFilterTest {
 		when(this.strategy.getTenant(this.request)).thenReturn("test");
 		this.filter.doFilter(this.request, this.response, new VerifyFilterChain("test"));
 
-		assertThat(TenantContextHolder.getContext().tenantIdentifier(), is(nullValue()));
+		assertThat(TenantContextHolder.getContext().getTenant(), is(nullValue()));
 	}
 
 	private static class VerifyFilterChain implements FilterChain {
@@ -108,7 +108,7 @@ public class TenantContextFilterTest {
 		@Override
 		public void doFilter(ServletRequest request, ServletResponse response) throws IOException, ServletException {
 
-			assertThat(TenantContextHolder.getContext().tenantIdentifier(), is(this.value));
+			assertThat(TenantContextHolder.getContext().getTenant(), is(this.value));
 
 		}
 	}

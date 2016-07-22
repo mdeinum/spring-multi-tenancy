@@ -34,7 +34,7 @@ public class DefaultTenantContextTest {
 		DefaultTenantContext ctx = new DefaultTenantContext();
 		ctx.setTenant("test");
 
-		assertThat(ctx.tenantIdentifier(), is("test"));
+		assertThat(ctx.getTenant(), is("test"));
 	}
 
 	@Test
@@ -46,4 +46,37 @@ public class DefaultTenantContextTest {
 
 	}
 
+	@Test
+	public void sameTenantShouldMakeTenantContextEqual() throws Exception {
+		DefaultTenantContext ctx = new DefaultTenantContext();
+		ctx.setTenant("test");
+
+		DefaultTenantContext ctx2 = new DefaultTenantContext();
+		ctx2.setTenant("test");
+
+		assertThat(ctx.equals(null), is(false));
+		assertThat(ctx.equals(ctx), is(true));
+		assertThat(ctx.equals(ctx2), is(true));
+		assertThat(ctx2.equals(ctx), is(true));
+	}
+
+	@Test
+	public void sameTenantShouldLeadToSameHashCode() throws Exception {
+		DefaultTenantContext ctx = new DefaultTenantContext();
+		ctx.setTenant("test");
+
+		DefaultTenantContext ctx2 = new DefaultTenantContext();
+		ctx2.setTenant("test");
+
+		assertThat(ctx.hashCode(), is(ctx2.hashCode()));
+	}
+
+	@Test
+	public void messageShouldMatch() throws Exception {
+
+		DefaultTenantContext ctx = new DefaultTenantContext();
+		ctx.setTenant("test");
+
+		assertThat(ctx.toString(), is("DefaultTenantContext [tenant='test']"));
+	}
 }

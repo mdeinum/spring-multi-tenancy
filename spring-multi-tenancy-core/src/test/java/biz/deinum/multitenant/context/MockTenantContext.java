@@ -16,8 +16,6 @@
 
 package biz.deinum.multitenant.context;
 
-import java.io.Serializable;
-
 /**
  * @author marten
  */
@@ -25,18 +23,14 @@ public class MockTenantContext implements TenantContext {
 
 	private String tenant;
 
+
 	@Override
-	public String tenantIdentifier() {
+	public String getTenant() {
 		return this.tenant;
 	}
 
 	@Override
-	public Serializable getTenant() {
-		return this.tenant;
-	}
-
-	@Override
-	public void setTenant(Serializable tenant) {
-		this.tenant=(String) tenant;
+	public void setTenant(String tenant) {
+		this.tenant= tenant;
 	}
 }

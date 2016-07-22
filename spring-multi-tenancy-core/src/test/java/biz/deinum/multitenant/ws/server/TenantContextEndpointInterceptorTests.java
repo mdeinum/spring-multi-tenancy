@@ -28,7 +28,6 @@ import org.springframework.ws.transport.context.TransportContextHolder;
 import biz.deinum.multitenant.context.TenantContextHolder;
 import biz.deinum.multitenant.context.TenantContextHolderStrategy;
 import biz.deinum.multitenant.context.TenantContextTestUtil;
-import biz.deinum.multitenant.context.ThreadLocalTenantContextHolderStrategy;
 import biz.deinum.multitenant.ws.MockWebServiceConnection;
 
 import static org.hamcrest.Matchers.is;
@@ -67,7 +66,6 @@ public class TenantContextEndpointInterceptorTests {
 
 		TransportContextHolder.setTransportContext(null);
 		TenantContextHolder.clearContext();
-		TenantContextHolder.setStrategy(new ThreadLocalTenantContextHolderStrategy());
 	}
 
 	@Test
@@ -75,7 +73,7 @@ public class TenantContextEndpointInterceptorTests {
 
 		when(this.connection.getRequestHeaders(DEFAULT_HEADER)).thenReturn(Arrays.asList(HEADER_VAL).iterator());
 		this.interceptor.handleRequest(null, null);
-		assertThat(TenantContextHolder.getContext().tenantIdentifier(), is(HEADER_VAL));
+		assertThat(TenantContextHolder.getContext().getTenant(), is(HEADER_VAL));
 	}
 
 	@Test
@@ -130,7 +128,7 @@ public class TenantContextEndpointInterceptorTests {
 		this.interceptor.setThrowExceptionOnMissingTenant(false);
 		when(this.connection.getRequestHeaders(DEFAULT_HEADER)).thenReturn(Collections.<String>emptyIterator());
 		this.interceptor.handleRequest(null, null);
-		assertThat(TenantContextHolder.getContext().tenantIdentifier(), is(nullValue()));
+		assertThat(TenantContextHolder.getContext().getTenant(), is(nullValue()));
 	}
 
 	@Test

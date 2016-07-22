@@ -44,7 +44,7 @@ public class TenantContextMessageInterceptor extends ChannelInterceptorAdapter {
 	@Override
 	public Message<?> preSend(Message<?> message, MessageChannel messageChannel) {
 
-		String tenant = TenantContextHolder.getContext().tenantIdentifier();
+		String tenant = TenantContextHolder.getContext().getTenant();
 		if (StringUtils.hasText(tenant)) {
 			return MessageBuilder
 					.fromMessage(message)

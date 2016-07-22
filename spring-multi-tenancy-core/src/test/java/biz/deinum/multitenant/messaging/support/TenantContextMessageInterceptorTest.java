@@ -77,13 +77,13 @@ public class TenantContextMessageInterceptorTest {
 
 		this.message = new GenericMessage("dummy-test-payload", Collections.singletonMap(this.interceptor.getHeaderName(), "test"));
 		this.interceptor.postReceive(this.message, null);
-		assertThat(TenantContextHolder.getContext().tenantIdentifier(), is("test"));
+		assertThat(TenantContextHolder.getContext().getTenant(), is("test"));
 	}
 
 	@Test
 	public void whenNoContextHeaderIsSetThenContextShouldNotBeSet() {
 
 		this.interceptor.postReceive(this.message, null);
-		assertThat(TenantContextHolder.getContext().tenantIdentifier(), is(nullValue()));
+		assertThat(TenantContextHolder.getContext().getTenant(), is(nullValue()));
 	}
 }

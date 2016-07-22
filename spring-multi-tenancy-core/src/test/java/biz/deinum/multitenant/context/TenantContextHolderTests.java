@@ -32,7 +32,7 @@ public class TenantContextHolderTests {
 
 		TenantContextHolder.clearContext();
 		assertThat(TenantContextHolder.getContext(), is(notNullValue()));
-		assertThat(TenantContextHolder.getContext().tenantIdentifier(), is(nullValue()));
+		assertThat(TenantContextHolder.getContext().getTenant(), is(nullValue()));
 	}
 
 	@Test
@@ -43,6 +43,5 @@ public class TenantContextHolderTests {
 		TenantContextHolder.setContext(context);
 		assertThat(TenantContextHolder.getContext(), is(context));
 	}
-
 
 }

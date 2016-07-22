@@ -65,7 +65,7 @@ public class TenantContextHandlerInterceptorTest {
 
 		when(this.strategy.getTenant(this.request)).thenReturn("test");
 		this.interceptor.preHandle(this.request, this.response, null);
-		assertThat(TenantContextHolder.getContext().tenantIdentifier(), is("test"));
+		assertThat(TenantContextHolder.getContext().getTenant(), is("test"));
 	}
 
 	@Test(expected = IllegalStateException.class)
@@ -81,7 +81,7 @@ public class TenantContextHandlerInterceptorTest {
 		this.interceptor.setThrowExceptionOnMissingTenant(false);
 		when(this.strategy.getTenant(this.request)).thenReturn(null);
 		this.interceptor.preHandle(this.request, this.response, null);
-		assertNull(TenantContextHolder.getContext().tenantIdentifier());
+		assertNull(TenantContextHolder.getContext().getTenant());
 	}
 
 	@Test
@@ -89,9 +89,9 @@ public class TenantContextHandlerInterceptorTest {
 
 		when(this.strategy.getTenant(this.request)).thenReturn("test");
 		this.interceptor.preHandle(this.request, this.response, null);
-		assertThat(TenantContextHolder.getContext().tenantIdentifier(), is("test"));
+		assertThat(TenantContextHolder.getContext().getTenant(), is("test"));
 		this.interceptor.afterCompletion(this.request, this.response, null, null);
-		assertThat(TenantContextHolder.getContext().tenantIdentifier(), is(nullValue()));
+		assertThat(TenantContextHolder.getContext().getTenant(), is(nullValue()));
 	}
 
 
