@@ -26,7 +26,6 @@ import org.springframework.ws.transport.context.DefaultTransportContext;
 import org.springframework.ws.transport.context.TransportContextHolder;
 
 import biz.deinum.multitenant.context.TenantContextHolder;
-import biz.deinum.multitenant.context.TenantContextHolderStrategy;
 import biz.deinum.multitenant.context.TenantContextTestUtil;
 import biz.deinum.multitenant.ws.MockWebServiceConnection;
 
@@ -66,6 +65,7 @@ public class TenantContextEndpointInterceptorTests {
 
 		TransportContextHolder.setTransportContext(null);
 		TenantContextHolder.clearContext();
+
 	}
 
 	@Test
@@ -129,15 +129,5 @@ public class TenantContextEndpointInterceptorTests {
 		when(this.connection.getRequestHeaders(DEFAULT_HEADER)).thenReturn(Collections.<String>emptyIterator());
 		this.interceptor.handleRequest(null, null);
 		assertThat(TenantContextHolder.getContext().getTenant(), is(nullValue()));
-	}
-
-	@Test
-	public void shouldClearContextInAfterCompletion() throws Exception {
-		TenantContextHolderStrategy mockStrategy = mock(TenantContextHolderStrategy.class);
-		TenantContextHolder.setStrategy(mockStrategy);
-		this.interceptor.afterCompletion(null, null, new Exception());
-
-		verify(mockStrategy, times(1)).clearContext();
-
 	}
 }
