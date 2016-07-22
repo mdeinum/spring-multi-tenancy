@@ -72,21 +72,22 @@ public abstract class TenantContextHolder {
 				ReflectionUtils.handleReflectionException(ex);
 			}
 		}
+		logger.trace("Using strategy: {}", strategy);
 	}
 
 	public static TenantContext getContext() {
 		TenantContext context = strategy.getContext();
-		logger.trace("Getting Context: {}", context);
+		logger.trace("Getting Context: {} from {}", context, strategy);
 		return context;
 	}
 
 	public static void setContext(final TenantContext context) {
-		logger.trace("Setting Context: {}", context);
+		logger.trace("Setting Context: {} with {}", context, strategy);
 		strategy.setContext(context);
 	}
 
 	public static void clearContext() {
-		logger.trace("Clearing Context: {}", strategy.getContext());
+		logger.trace("Clearing Context: {} from {}", strategy.getContext(), strategy);
 		strategy.clearContext();
 	}
 
