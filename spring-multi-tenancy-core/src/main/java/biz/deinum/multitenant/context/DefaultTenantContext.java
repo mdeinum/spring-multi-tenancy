@@ -59,6 +59,8 @@ class DefaultTenantContext implements TenantContext {
 
 	@Override
 	public String toString() {
-		return "DefaultTenantContext [tenant='" + this.tenant + "']";
+        return String.format(
+                "DefaultTenantContext [tenant=%s]",
+                this.tenant);
 	}
 }

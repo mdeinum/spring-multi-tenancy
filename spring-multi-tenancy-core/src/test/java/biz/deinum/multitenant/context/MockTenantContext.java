@@ -33,4 +33,11 @@ public class MockTenantContext implements TenantContext {
 	public void setTenant(String tenant) {
 		this.tenant= tenant;
 	}
+
+	@Override
+	public String toString() {
+		return String.format(
+				"MockTenantContext [tenant=%s]",
+				this.tenant);
+	}
 }

@@ -75,15 +75,18 @@ public abstract class TenantContextHolder {
 	}
 
 	public static TenantContext getContext() {
-		return strategy.getContext();
+		TenantContext context = strategy.getContext();
+		logger.trace("Getting Context: {}", context);
+		return context;
 	}
 
 	public static void setContext(final TenantContext context) {
-
+		logger.trace("Setting Context: {}", context);
 		strategy.setContext(context);
 	}
 
 	public static void clearContext() {
+		logger.trace("Clearing Context: {}", strategy.getContext());
 		strategy.clearContext();
 	}
 
