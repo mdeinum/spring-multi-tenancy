@@ -1,6 +1,7 @@
 # spring-multi-tenancy
 
 [![Build Status](https://travis-ci.org/mdeinum/spring-multi-tenancy.svg?branch=master)](https://travis-ci.org/mdeinum/spring-multi-tenancy)
+[![codecov](https://codecov.io/gh/mdeinum/spring-multi-tenancy/branch/master/graph/badge.svg)](https://codecov.io/gh/mdeinum/spring-multi-tenancy)
 [![Join the chat at https://gitter.im/mdeinum/spring-multi-tenancy](https://badges.gitter.im/mdeinum/spring-multi-tenancy.svg)](https://gitter.im/mdeinum/spring-multi-tenancy?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 Utilizing the `TargetSource` and AOP infrastructure of Spring this enables for dynamic switching of basically anything. This has been used in production for switching `SessionFactory`'s and/or `DataSource`s based on some request parameter.
